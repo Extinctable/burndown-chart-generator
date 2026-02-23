@@ -59,7 +59,11 @@ class Configuration:
 
     # --- Issue Type Filtering (Optional, Org Scope) ---
     # Comma-separated issue type names to include
-    ISSUE_TYPES_INCLUDE = os.getenv("GITHUB_ISSUE_TYPES_INCLUDE", "")
+    ISSUE_TYPES_INCLUDE = os.getenv("GITHUB_ISSUE_TYPES_INCLUDE", "").strip()
+    
+    # Extract only the part before any comment (if present)
+    if "#" in ISSUE_TYPES_INCLUDE:
+        ISSUE_TYPES_INCLUDE = ISSUE_TYPES_INCLUDE.split("#")[0].strip()
 
     DEFAULT_ISSUE_TYPES_INCLUDE_LIST = ["task", "bug", "feature"]
 

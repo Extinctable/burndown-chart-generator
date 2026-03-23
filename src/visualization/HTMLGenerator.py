@@ -548,22 +548,25 @@ class HTMLGenerator:
             return true;
         }
 
+        // Helper function to parse date string in local timezone
+        function parseLocalDate(dateString) {
+            const [year, month, day] = dateString.split('-');
+            return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 0, 0, 0, 0);
+        }
+
         // Function to calculate burndown data based on algorithm
         function calculateBurndown(startDate, endDate, algorithm) {
             try {
                 // Get selected sprint
                 const selectedSprint = document.getElementById('sprintSelector').value;
 
-                // Convert string dates to Date objects and normalize to midnight
-                const start = new Date(startDate);
-                start.setHours(0, 0, 0, 0);
-
-                const end = new Date(endDate);
-                end.setHours(0, 0, 0, 0); // Change to midnight instead of 23:59:59
+                // Convert string dates to Date objects in local timezone
+                const start = parseLocalDate(startDate);
+                const end = parseLocalDate(endDate);
 
                 // Generate array of dates between start and end (at midnight)
                 const dateRange = [];
-                const currentDate = new Date(start);
+                const currentDate = new Date(start.getTime());
                 while (currentDate <= end) {
                     // Create a new date object to avoid reference issues
                     dateRange.push(new Date(currentDate.getTime()));
@@ -985,12 +988,8 @@ class HTMLGenerator:
                 ];
 
                 // Add vertical line for today if within the date range
-                const startDateObj = new Date(startDate);
-                const endDateObj = new Date(endDate);
-
-                // Normalize date objects for comparison
-                startDateObj.setHours(0, 0, 0, 0);
-                endDateObj.setHours(0, 0, 0, 0);
+                const startDateObj = parseLocalDate(startDate);
+                const endDateObj = parseLocalDate(endDate);
 
                 if (today >= startDateObj && today <= endDateObj) {
                     plotData.push({
@@ -1259,11 +1258,8 @@ class HTMLGenerator:
                     const startDate = document.getElementById('startDate').value;
                     const endDate = document.getElementById('endDate').value;
 
-                    const start = new Date(startDate);
-                    start.setHours(0, 0, 0, 0);
-
-                    const end = new Date(endDate);
-                    end.setHours(0, 0, 0, 0);
+                    const start = parseLocalDate(startDate);
+                    const end = parseLocalDate(endDate);
 
                     const dateElement = document.getElementById('dateDebug');
                     dateElement.style.display = 'block';

@@ -1,0 +1,13 @@
+# Git ignore file for the burndown generator project
+
+# Ignore environment variable files
+.env
+.venv
+
+# Ignore bytecode files
+.DS_Store
+__pycache__/
+
+# Ignore project data and generated HTML files
+project_data.json
+sprint_burndown.html
